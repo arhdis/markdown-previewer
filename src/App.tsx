@@ -65,6 +65,7 @@ Inline <abbr title="Hypertext Markup Language">HTML</abbr> is supported.`;
 
 export default function App() {
   const [markdown, setMarkdown] = useState(defaultMarkdown);
+  const [activeTab, setActiveTab] = useState<'editor' | 'preview'>('editor');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
@@ -132,7 +133,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
+    <div className="h-dvh bg-slate-50 flex flex-col font-sans text-slate-900 overflow-hidden">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm shrink-0">
         <div className="flex items-center gap-2">
@@ -170,15 +171,55 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+      <main className="flex-1 flex flex-col md:flex-row overflow-hidden min-h-0">
+        {/* Mobile Tabs */}
+        <div className="md:hidden bg-white border-b border-slate-200 shrink-0">
+          <div className="px-4 py-2 flex gap-2">
+            <button
+              type="button"
+              onClick={() => setActiveTab('editor')}
+              className={[
+                "flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1",
+                activeTab === 'editor'
+                  ? "bg-indigo-600 text-white border-indigo-600"
+                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50",
+              ].join(' ')}
+              aria-pressed={activeTab === 'editor'}
+            >
+              <FileText size={16} />
+              Editor
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveTab('preview')}
+              className={[
+                "flex-1 inline-flex items-center justify-center gap-2 rounded-md px-3 py-2 text-sm font-medium border transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1",
+                activeTab === 'preview'
+                  ? "bg-indigo-600 text-white border-indigo-600"
+                  : "bg-white text-slate-700 border-slate-300 hover:bg-slate-50",
+              ].join(' ')}
+              aria-pressed={activeTab === 'preview'}
+            >
+              <Eye size={16} />
+              Preview
+            </button>
+          </div>
+        </div>
+
         {/* Editor Pane */}
-        <div className="flex-1 flex flex-col border-r border-slate-200 bg-white min-w-0">
-          <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 flex items-center gap-2 text-sm font-medium text-slate-600 shrink-0">
+        <div
+          className={[
+            "flex-1 flex flex-col border-slate-200 bg-white min-w-0 min-h-0",
+            "md:border-r",
+            activeTab === 'preview' ? "hidden md:flex" : "flex",
+          ].join(' ')}
+        >
+          <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 items-center gap-2 text-sm font-medium text-slate-600 shrink-0 hidden md:flex">
             <FileText size={16} />
             Editor
           </div>
           <textarea
-            className="flex-1 w-full p-6 resize-none focus:outline-none font-mono text-sm leading-relaxed text-slate-800 bg-transparent"
+            className="flex-1 w-full p-6 resize-none focus:outline-none font-mono text-sm leading-relaxed text-slate-800 bg-transparent overflow-y-auto min-h-0"
             value={markdown}
             onChange={handleMarkdownChange}
             placeholder="Type your markdown here..."
@@ -187,13 +228,18 @@ export default function App() {
         </div>
 
         {/* Preview Pane */}
-        <div className="flex-1 flex flex-col bg-white min-w-0">
-          <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 flex items-center gap-2 text-sm font-medium text-slate-600 shrink-0">
+        <div
+          className={[
+            "flex-1 flex flex-col bg-white min-w-0 min-h-0",
+            activeTab === 'editor' ? "hidden md:flex" : "flex",
+          ].join(' ')}
+        >
+          <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 items-center gap-2 text-sm font-medium text-slate-600 shrink-0 hidden md:flex">
             <Eye size={16} />
             Preview
           </div>
           <div 
-            className="flex-1 overflow-y-auto p-8 cursor-text"
+            className="flex-1 overflow-y-auto p-6 md:p-8 cursor-text min-h-0"
             onClick={selectPreviewText}
             title="Click to select all text"
           >
