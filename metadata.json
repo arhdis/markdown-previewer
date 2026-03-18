@@ -1,0 +1,5 @@
+{
+  "name": "Markdown Previewer",
+  "description": "An offline Markdown online preview editor supporting file uploads and one-click copy.",
+  "requestFramePermissions": []
+}
