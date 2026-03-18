@@ -135,17 +135,18 @@ export default function App() {
   return (
     <div className="h-dvh bg-slate-50 flex flex-col font-sans text-slate-900 overflow-hidden">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm shrink-0">
-        <div className="flex items-center gap-2">
+      <header className="bg-white border-b border-slate-200 px-3 sm:px-6 py-2 sm:py-4 flex items-center justify-between shadow-sm shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
           <div className="bg-indigo-600 text-white p-2 rounded-lg">
             <FileText size={20} />
           </div>
-          <h1 className="text-xl font-semibold text-slate-800 tracking-tight">
-            Markdown Previewer
+          <h1 className="font-semibold text-slate-800 tracking-tight truncate">
+            <span className="text-base sm:text-xl hidden sm:inline">Markdown Previewer</span>
+            <span className="text-base sm:hidden">MD</span>
           </h1>
         </div>
         
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <input
             type="file"
             accept=".md,.txt,text/markdown,text/plain"
@@ -155,17 +156,21 @@ export default function App() {
           />
           <button
             onClick={triggerFileUpload}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+            className="inline-flex items-center justify-center gap-2 h-9 w-9 sm:h-auto sm:w-auto px-0 sm:px-4 py-0 sm:py-2 bg-white border border-slate-300 rounded-md text-sm font-medium text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+            aria-label="Upload file"
+            title="Upload file"
           >
             <Upload size={16} />
-            Upload File
+            <span className="hidden sm:inline">Upload File</span>
           </button>
           <button
             onClick={copyToClipboard}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+            className="inline-flex items-center justify-center gap-2 h-9 w-9 sm:h-auto sm:w-auto px-0 sm:px-4 py-0 sm:py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
+            aria-label="Copy preview"
+            title="Copy preview"
           >
             <Copy size={16} />
-            Copy Preview
+            <span className="hidden sm:inline">Copy Preview</span>
           </button>
         </div>
       </header>
@@ -260,7 +265,7 @@ export default function App() {
                         children={String(children).replace(/\n$/, '')}
                         language={match[1]}
                         style={vscDarkPlus}
-                        className="rounded-md !mt-0 !mb-0"
+                        className="rounded-md mt-0! mb-0!"
                       />
                     ) : (
                       <code {...rest} ref={ref} className={className}>
